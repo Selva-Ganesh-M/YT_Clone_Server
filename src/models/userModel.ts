@@ -33,7 +33,8 @@ const userSchema = new mongoose.Schema<IUser>({
         default: 0,
     },
     subscribedUsers: {
-        type: [String]
+        type: [String],
+        default: []
     }
 }, {
     timestamps: true
