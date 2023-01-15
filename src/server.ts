@@ -1,9 +1,19 @@
 import express from "express";
 import { PORT } from "./utils/config";
 import { connectToDB } from "./utils/connectToDb";
+import authRouter from "./routers/auth"
+import { customErrorHandler } from "./middlewares/customErrorHandler";
 
 const server = express();
 
+// middlewares
+server.use(express.json())
+
+// Routers
+server.use("/api/auth", authRouter)
+
+// custom error handler
+server.use(customErrorHandler);
 
 const startServer = async () => {
     try {
@@ -16,5 +26,6 @@ const startServer = async () => {
         
     }
 }
-
 startServer();
+
+

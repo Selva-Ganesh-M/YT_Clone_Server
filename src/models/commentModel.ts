@@ -25,4 +25,4 @@ const commentSchema = new mongoose.Schema<IComment>({
 
 const commentModel = mongoose.model<mongoose.Schema<IComment>>("Comment", commentSchema)
 
-export default commentModel
+export default commentModel;
