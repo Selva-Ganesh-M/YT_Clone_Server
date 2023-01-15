@@ -4,9 +4,9 @@ interface IUser {
     username: string;
     email: string;
     password:string;
-    image: string;
-    subscribers: number;
-    subscribedUsers: Array<string>;
+    image?: string;
+    subscribers?: number;
+    subscribedUsers?: Array<string>;
 
 }
 

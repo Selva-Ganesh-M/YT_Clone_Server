@@ -5,10 +5,10 @@ export interface IVideo {
     desc: string
     imgUrl: string
     videoUrl: string
-    views: number
-    tags: Array<string>
-    likes: Array<string>
-    dislikes: Array<string>
+    views?: number
+    tags?: Array<string>
+    likes?: Array<string>
+    dislikes?: Array<string>
     userId: string;
 
 }
