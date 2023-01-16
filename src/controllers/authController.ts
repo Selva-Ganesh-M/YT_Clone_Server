@@ -32,18 +32,25 @@ const signup = asyncHandler(
 
 const signin = asyncHandler(
     async (req: Request<{}, {}, TAuthSigninRequest["body"]>, res:Response, next: NextFunction) => {
-        const {email, password} = req.body;
-        const user = await userModel.findOne({email}).exec();
+        const {email} = req.body;
+        const user = await userModel.findOne({email});
         if (!user){
             throw new customError(404, "user not found.")
         }
-        const isValidPassword = bcrypt.compareSync(password, user.password);
+        const isValidPassword = bcrypt.compareSync(req.body.password, user.password);
         if (!isValidPassword) {
             throw new customError(400, "password mismatch found")
         }
         const token = jwt.sign({email, _id:user._id}, JWT_SECRET!)
-        const response = {email, token}
-        res.status(200).json({
+        // const {password, ...others} = user._doc
+        const response = user as Partial<IUser>;
+        response.password = undefined;
+        res
+        .cookie("access_token", token, {
+            httpOnly: true
+        })
+        .status(200)
+        .json({
             status: "success",
             message: "user sign in successful.",
             payload: response

@@ -3,11 +3,13 @@ import { PORT } from "./utils/config";
 import { connectToDB } from "./utils/connectToDb";
 import authRouter from "./routers/auth"
 import { customErrorHandler } from "./middlewares/customErrorHandler";
+import cookieParser from "cookie-parser";
 
 const server = express();
 
 // middlewares
 server.use(express.json())
+server.use(cookieParser())
 
 // Routers
 server.use("/api/auth", authRouter)
