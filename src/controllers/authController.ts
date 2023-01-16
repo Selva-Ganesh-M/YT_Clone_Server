@@ -3,6 +3,9 @@ import userModel, { IUser } from "../models/userModel";
 import bcrypt, { genSalt, genSaltSync } from "bcryptjs";
 import asyncHandler from "express-async-handler";
 import { customError } from "../utils/customError";
+import { TAuthSigninRequest } from "../validationSchemas/authSchema";
+import jwt from "jsonwebtoken"
+import { JWT_SECRET } from "../utils/config";
 
 // signup user
 const signup = asyncHandler(
@@ -27,11 +30,24 @@ const signup = asyncHandler(
 
 // @sign in
 
-export type TSignInReqBody = {username: string, password: string}
-
 const signin = asyncHandler(
-    async (req: Request<{}, {}, TSignInReqBody>, res:Response, next: NextFunction) => {
-
+    async (req: Request<{}, {}, TAuthSigninRequest["body"]>, res:Response, next: NextFunction) => {
+        const {email, password} = req.body;
+        const user = await userModel.findOne({email}).exec();
+        if (!user){
+            throw new customError(404, "user not found.")
+        }
+        const isValidPassword = bcrypt.compareSync(password, user.password);
+        if (!isValidPassword) {
+            throw new customError(400, "password mismatch found")
+        }
+        const token = jwt.sign({email, _id:user._id}, JWT_SECRET!)
+        const response = {email, token}
+        res.status(200).json({
+            status: "success",
+            message: "user sign in successful.",
+            payload: response
+        })
     }
 )
 
