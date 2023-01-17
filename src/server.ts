@@ -4,6 +4,7 @@ import { connectToDB } from "./utils/connectToDb";
 import authRouter from "./routers/auth"
 import { customErrorHandler } from "./middlewares/customErrorHandler";
 import cookieParser from "cookie-parser";
+import { userRouter } from "./routers/user";
 
 const server = express();
 
@@ -13,6 +14,7 @@ server.use(cookieParser())
 
 // Routers
 server.use("/api/auth", authRouter)
+server.use("/api/users", userRouter)
 
 // custom error handler
 server.use(customErrorHandler);

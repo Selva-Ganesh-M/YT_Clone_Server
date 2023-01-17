@@ -1,9 +1,11 @@
 export class customError extends Error {
-    public errstatus: number
-    public message: string
-    constructor(errstatus: number, message: string) {
+    public status: string
+    public errstatuscode: number
+    public message: any
+    constructor(errstatuscode: number, message: any) {
       super(message)
-      this.errstatus = errstatus
+      this.errstatuscode = errstatuscode
       this.message = message
+      this.status = "failure"
     }
   }

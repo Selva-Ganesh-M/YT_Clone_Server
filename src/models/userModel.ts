@@ -10,6 +10,8 @@ export interface IUser {
 
 }
 
+export interface IUserDoc extends IUser, Document{}
+
 const userSchema = new mongoose.Schema<IUser>({
     username: {
         required: true,
@@ -40,5 +42,5 @@ const userSchema = new mongoose.Schema<IUser>({
     timestamps: true
 })
 
-const userModel= mongoose.model("User", userSchema);
+const userModel= mongoose.model<IUserDoc>("User", userSchema);
 export default userModel
