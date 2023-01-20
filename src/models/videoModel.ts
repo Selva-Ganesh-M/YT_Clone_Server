@@ -1,20 +1,30 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+import { IUser } from "./userModel";
 
 export interface IVideo {
     title: string
     desc: string
     imgUrl: string
     videoUrl: string
-    views?: number
-    tags?: Array<string>
-    likes?: Array<string>
-    dislikes?: Array<string>
+    views: number
+    tags: Array<string>
+    likes: Array<string>
+    dislikes: Array<string>
     userId: string;
+  }
 
+export interface IVideoDoc extends IVideo, Document{}
+
+export interface IVideoLeanDoc extends IUser{
+  _id: string
 }
-
+  
 const VideoSchema = new mongoose.Schema<IVideo>(
   {
+      userId: {
+        type: String,
+        required: true,
+      },
       title: {
         type: String,
         required: true,
@@ -47,10 +57,6 @@ const VideoSchema = new mongoose.Schema<IVideo>(
         type: [String],
         default: [],
       },
-    userId: {
-      type: String,
-      required: true,
-    },
   },
   { timestamps: true }
 );
