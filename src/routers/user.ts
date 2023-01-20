@@ -6,6 +6,15 @@ import { userSchema } from "../validationSchemas/userSchema";
 
 const router = express.Router();
 
-router.put("/:id", authorization, validator(userSchema.userUpdateSchema), userController.updateUser)
+router
+// get user
+.get("/:id", validator(userSchema.getUserSchema), userController.getUser)
+// update user
+.put("/update/:id", authorization, validator(userSchema.userUpdateSchema), userController.updateUser)
+// delete user
+.delete("/delete/:id", authorization, validator(userSchema.userDeleteSchema), userController.deleteUser)
+// subscribe user
+.patch("/subscribe/:id", authorization, validator(userSchema.subscribeUserSchema), userController.subscribeUser)
+
 
 export const userRouter = router

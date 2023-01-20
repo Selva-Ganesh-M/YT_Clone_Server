@@ -1,4 +1,5 @@
-import mongoose, { Document, Model } from "mongoose";
+import mongoose, { Date, Document, Model } from "mongoose";
+import { customError } from "../utils/customError";
 
 export interface IUser {
     username: string;
@@ -11,6 +12,10 @@ export interface IUser {
 }
 
 export interface IUserDoc extends IUser, Document{}
+
+export interface IUserLeanDoc extends IUser {
+    _id: mongoose.Types.ObjectId,
+}
 
 const userSchema = new mongoose.Schema<IUser>({
     username: {
@@ -41,6 +46,7 @@ const userSchema = new mongoose.Schema<IUser>({
 }, {
     timestamps: true
 })
+
 
 const userModel= mongoose.model<IUserDoc>("User", userSchema);
 export default userModel

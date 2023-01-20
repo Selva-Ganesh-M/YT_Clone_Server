@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import userModel, { IUser, IUserDoc } from "../models/userModel";
+import userModel, { IUser, IUserLeanDoc } from "../models/userModel";
 import { customError } from "../utils/customError";
 import hasPrivilege from "../utils/hasPrivilege";
 
 
-const isUpdateAllowed = async (id: string, body: IUser, user:IUserDoc): Promise<Boolean> => {
+const isUpdateAllowed = async (id: string, body: IUser, user:IUserLeanDoc): Promise<Boolean> => {
     const {username, email} = body;
 
     // restricting access to change others user's details

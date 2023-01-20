@@ -6,6 +6,7 @@ import { customError } from "../utils/customError";
 import { TAuthSigninRequest } from "../validationSchemas/authSchema";
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../utils/config";
+import hashPassword from "../utils/hashPassword";
 
 // signup user
 const signup = asyncHandler(
@@ -13,8 +14,7 @@ const signup = asyncHandler(
         const b = req.body;
 
         // hashing the password
-        const salt = bcrypt.genSaltSync(10)
-        const hashedPassword = bcrypt.hashSync(req.body.password, salt)
+        const hashedPassword = hashPassword(req.body.password)
 
         // creating new user
         const user = new userModel<IUser>({...req.body, password: hashedPassword});
@@ -25,6 +25,9 @@ const signup = asyncHandler(
         if (!createdUser) {
             throw new customError(422, "user creation is successful. user fetch failed.")
         }
+
+        console.log(typeof createdUser._id, createdUser._id);
+        
 
         // response
         res.status(201).json({

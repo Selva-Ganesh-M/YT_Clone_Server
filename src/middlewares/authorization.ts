@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken"
-import userModel, { IUser, IUserDoc } from "../models/userModel";
+import userModel, { IUser, IUserLeanDoc } from "../models/userModel";
 import { JWT_SECRET } from "../utils/config";
 import { customError } from "../utils/customError";
 import asyncHandler from "express-async-handler";
@@ -14,27 +14,27 @@ type Tjwt = {
 
 declare module "express-serve-static-core" {
     interface Request {
-      user?: IUserDoc;
+      user?: IUserLeanDoc;
     }
   }
   
 
 export const authorization =  asyncHandler(
-    async (req: Request<{}, {}, IUser>, res:Response, next: NextFunction)=>{
+    async (req: Request, res:Response, next: NextFunction)=>{
 
         // token verification
         const token = req.cookies.access_token;
+        if (!token) throw new customError(401, "authorization failed: missing access_token.")
+
         const {email, _id, iat} = jwt.verify(token, JWT_SECRET!) as Tjwt;
         if (!_id) throw new customError(400, "authorization failed: invalid access_token.")
     
         // user fetching 
-        const user = await userModel.findById(_id);
+        const user = await userModel.findById(_id).lean();
         if (!user) throw new customError(404, "authorization failed: user doesn't exist.")
     
         // attaching user with the request
-        req.user = user
-        console.log("authorization end.");
-        
+        req.user = user 
         next();
     
     }

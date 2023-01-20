@@ -1,6 +1,9 @@
+import mongoose from "mongoose";
 import {z, object, string} from "zod";
 
 
+
+// update user
 const userUpdateSchema = z.object({
     body: object({
         // username
@@ -36,8 +39,37 @@ const userUpdateSchema = z.object({
     })
 })
 
+// delete user
+const userDeleteSchema = z.object({
+    params: z.object({
+        id: string().refine((id)=>mongoose.isValidObjectId(id), {
+            message: "not a valid mongoose id."
+        })
+    })
+})
+
+// get user
+const getUserSchema = z.object({
+    params: z.object({
+        id: string().refine((id)=>mongoose.isValidObjectId(id), {
+            message: "not a valid mongoose id."
+        })
+    })
+})
+
+// subscribe user schema
+const subscribeUserSchema = z.object({
+    params: z.object({
+        id: string().refine((id)=>mongoose.isValidObjectId(id), {
+            message: "not a valid mongoose id."
+        })
+    })
+})
 
 
 export const userSchema = {
-    userUpdateSchema
+    userUpdateSchema,
+    userDeleteSchema,
+    getUserSchema,
+    subscribeUserSchema
 }
