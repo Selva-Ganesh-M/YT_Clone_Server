@@ -16,6 +16,6 @@ router
 // subscribe user
 .patch("/subscribe/:id", authorization, validator(userSchema.paramsMongooseIdCheck), userController.subscribeUser)
 // unsubscribe an user
-.patch("/unsubscribe/:id", authorization, validator(userSchema.paramsMongooseIdCheck), userController.subscribeUser)
+.patch("/unsubscribe/:id", authorization, validator(userSchema.paramsMongooseIdCheck), userController.unSubscribeUser)
 
 export const userRouter = router

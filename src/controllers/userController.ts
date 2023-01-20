@@ -7,6 +7,7 @@ import hasPrivilege from "../utils/hasPrivilege";
 import { customError } from "../utils/customError";
 import { string } from "zod";
 import hashPassword from "../utils/hashPassword";
+import mongoose from "mongoose";
 
 
 // get a user'''''''''''''''''''''''''''''''''''''''''''
@@ -120,11 +121,39 @@ const subscribeUser = asyncHandler(
         })
     }
 )
+// un-subscribe an user
+const unSubscribeUser = asyncHandler(
+    async (req:Request<{id: string}>, res:Response, next:NextFunction)=>{
+        const self = req.user!;
+        const {id} = req.params;
+
+        // updating self on subscribed Users
+        await userModel.findByIdAndUpdate(self._id, {
+            $pull: {
+                subscribedUsers: id
+            },
+        })
+
+        // updating subscribed channel's subscriber count
+        await userModel.findByIdAndUpdate(id, {
+            $inc: {
+                subscribers: -1
+            }
+        })
+
+        // sending response
+        res.status(200).json({
+            status: "success",
+            message: "user unsubscribed.",
+        })
+    }
+)
 
 
 export const userController = {
     updateUser,
     deleteUser,
     getUser,
-    subscribeUser
+    subscribeUser,
+    unSubscribeUser
 }
