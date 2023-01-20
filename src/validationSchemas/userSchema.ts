@@ -2,9 +2,17 @@ import mongoose from "mongoose";
 import {z, object, string} from "zod";
 
 
+// params mongoose id check
+const paramsMongooseIdCheck = z.object({
+    params: z.object({
+        id: string().refine((id)=>mongoose.isValidObjectId(id), {
+            message: "not a valid mongoose id."
+        })
+    })
+})
 
 // update user
-const userUpdateSchema = z.object({
+const userUpdateSchema = paramsMongooseIdCheck.extend({
     body: object({
         // username
         username: string({
@@ -32,44 +40,9 @@ const userUpdateSchema = z.object({
             required_error: "Email is a required field",
           }).optional(),
     }),
-    params: z.object({
-        id: z.string({
-            required_error: "id in parameter is a required field"
-        })
-    })
 })
-
-// delete user
-const userDeleteSchema = z.object({
-    params: z.object({
-        id: string().refine((id)=>mongoose.isValidObjectId(id), {
-            message: "not a valid mongoose id."
-        })
-    })
-})
-
-// get user
-const getUserSchema = z.object({
-    params: z.object({
-        id: string().refine((id)=>mongoose.isValidObjectId(id), {
-            message: "not a valid mongoose id."
-        })
-    })
-})
-
-// subscribe user schema
-const subscribeUserSchema = z.object({
-    params: z.object({
-        id: string().refine((id)=>mongoose.isValidObjectId(id), {
-            message: "not a valid mongoose id."
-        })
-    })
-})
-
 
 export const userSchema = {
     userUpdateSchema,
-    userDeleteSchema,
-    getUserSchema,
-    subscribeUserSchema
+    paramsMongooseIdCheck
 }

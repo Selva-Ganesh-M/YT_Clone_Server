@@ -8,13 +8,14 @@ const router = express.Router();
 
 router
 // get user
-.get("/:id", validator(userSchema.getUserSchema), userController.getUser)
+.get("/:id", validator(userSchema.paramsMongooseIdCheck), userController.getUser)
 // update user
 .put("/update/:id", authorization, validator(userSchema.userUpdateSchema), userController.updateUser)
 // delete user
-.delete("/delete/:id", authorization, validator(userSchema.userDeleteSchema), userController.deleteUser)
+.delete("/delete/:id", authorization, validator(userSchema.paramsMongooseIdCheck), userController.deleteUser)
 // subscribe user
-.patch("/subscribe/:id", authorization, validator(userSchema.subscribeUserSchema), userController.subscribeUser)
-
+.patch("/subscribe/:id", authorization, validator(userSchema.paramsMongooseIdCheck), userController.subscribeUser)
+// unsubscribe an user
+.patch("/unsubscribe/:id", authorization, validator(userSchema.paramsMongooseIdCheck), userController.subscribeUser)
 
 export const userRouter = router
