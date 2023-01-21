@@ -3,6 +3,11 @@ import { IVideoDoc, IVideoLeanDoc } from "../models/videoModel";
 import { paramsMongooseIdCheck } from "./userSchema";
 
 
+// get a video schema
+
+const getAVideoSchema = paramsMongooseIdCheck
+
+
 // create video schema '''''''''''''
 type T_cvSchema_body = {
     title: z.ZodString,
@@ -28,6 +33,8 @@ const createVideoSchema = z.object({
     })
 })
 
+
+
 // update video schema '''''''''''''''
 const updateVideoSchema = paramsMongooseIdCheck.extend({
     body: z.object({
@@ -50,10 +57,14 @@ const updateVideoSchema = paramsMongooseIdCheck.extend({
     })
 })
 
-const getvideoSchema = paramsMongooseIdCheck
+// delete a video
+
+const deleterUserSchema = paramsMongooseIdCheck
+
 
 export const videoSchema = {
     createVideoSchema,
     updateVideoSchema,
-    getvideoSchema
+    getAVideoSchema,
+    deleterUserSchema
 }

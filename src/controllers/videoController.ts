@@ -5,16 +5,22 @@ import { customError } from "../utils/customError"
 import hasPrivilege from "../utils/hasPrivilege"
 
 // get a video
-
 const getAVideo = asyncHandler (
-    async (req: Request, res: Response) => {
-
+    async (req: Request<{id: string}>, res: Response) => {
+        const {id} = req.params
+        const video = await videoModel.findById(id)
+        if (!video) throw new customError(404, "get a video failed: requested video not found.")
+        
+        res.status(200).json({
+            status: "success",
+            message: "resource attached as payload",
+            payload: video
+        })
     }
 )
 
 
 // create video
-
 type TCVbody = {
     title: string,
     desc: string,
@@ -33,6 +39,7 @@ const createVideo = asyncHandler(
     })
    }
 )
+
 
 // update video
 export type TUpdateVideo = {
@@ -69,7 +76,38 @@ const updateVideo = asyncHandler(
 )
 
 
+// delete a video
+const deleteVideo = asyncHandler(
+async (req: Request<{id: string}>, res:Response) => {
+    const {id: videoId} = req.params
+    const self = req.user!
+
+    // check if video exits
+    const video = await videoModel.findById(videoId).lean();
+    if (!video) throw new customError(404, "video deletion failed: requested video not found.")
+
+    // does user has previlage?
+    hasPrivilege(self._id.toString(), video.userId);
+
+    // deletion operation
+    const deletedVideo = await videoModel.findByIdAndDelete(videoId).lean()
+    if (!deletedVideo) throw new customError(500, "video deletion failed: mongoose deletion failed.")
+
+    // response
+    res.status(200).json({
+    status:"success",
+    message: "video deleted succesfully",
+    payload: deletedVideo
+    })
+
+}
+)
+
+
+// all exports
 export const videoController = {
     createVideo,
-    updateVideo
+    updateVideo,
+    getAVideo,
+    deleteVideo
 }

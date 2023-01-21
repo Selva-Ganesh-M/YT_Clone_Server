@@ -6,21 +6,37 @@ import { videoSchema } from "../validationSchemas/videoSchema";
 
 const router = express.Router();
 
+// get a video
+router.get(
+    "/:id", 
+    validator(videoSchema.getAVideoSchema), 
+    videoController.getAVideo
+    )
+
 // create a video
 router.post(
-"/create",
-authorization,
-validator(videoSchema.createVideoSchema),
-videoController.createVideo
+    "/create",
+    authorization,
+    validator(videoSchema.createVideoSchema),
+    videoController.createVideo
 )
 
 // update video
 router.post(
-"/update/:id",
-authorization,
-validator(videoSchema.updateVideoSchema),
-videoController.updateVideo
+    "/update/:id",
+    authorization,
+    validator(videoSchema.updateVideoSchema),
+    videoController.updateVideo
 )
+
+// delete a video
+router.delete(
+    "/delete/:id",
+    authorization,
+    validator(videoSchema.deleterUserSchema),
+    videoController.deleteVideo,
+)
+
 
 const videoRouter = router
 export default videoRouter
