@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { z } from "zod";
+import { string, z } from "zod";
 import { IVideoDoc, IVideoLeanDoc } from "../models/videoModel";
 import { paramsMongooseIdCheck } from "./userSchema";
 
@@ -79,11 +79,46 @@ const deleterUserSchema = paramsMongooseIdCheck
 // view a video
 const viewAVideoSchema = paramsMongooseIdCheck
 
+// get trend videos
+const trendVideosSchema = paramsMongooseIdCheck
+
+// getVideosByTagsSchema
+const getVideosByTagsSchema = z.object({
+    query: z.object({
+        tags: string({required_error: "tags must be mentioned in the query string"}).refine(
+            (data)=>{
+                if(!data.length) return false
+                return true
+            },{
+                message: "tags in query string can't be empty."
+            }
+        )
+    })
+})
+
+// search functionality
+const searchVideo = z.object({
+    query: z.object({
+        src: string({required_error: "query paramameter must have src attribute"}).refine(
+            (src)=>{
+                if (!src.length) return false
+                return true
+            },
+            {
+                message: "src attribute in query parameter can't by empty"
+            }
+        )
+    })
+})
+
 
 export const videoSchema = {
     createVideoSchema,
     updateVideoSchema,
     getAVideoSchema,
     deleterUserSchema,
-    viewAVideoSchema
+    viewAVideoSchema,
+    trendVideosSchema,
+    getVideosByTagsSchema,
+    searchVideo
 }

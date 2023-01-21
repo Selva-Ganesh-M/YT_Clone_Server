@@ -6,20 +6,26 @@ import { customErrorHandler } from "./middlewares/customErrorHandler";
 import cookieParser from "cookie-parser";
 import { userRouter } from "./routers/user";
 import videoRouter from "./routers/video";
+import customReqLogger from "./utils/customRequestLogger";
 
 const server = express();
 
 // middlewares
 server.use(express.json())
 server.use(cookieParser())
+    //custom request logger
+    server.use(customReqLogger);
 
 // Routers
 server.use("/api/auth", authRouter)
 server.use("/api/users", userRouter)
 server.use("/api/videos", videoRouter)
 
+
+
 // custom error handler
 server.use(customErrorHandler);
+
 
 const startServer = async () => {
     try {

@@ -150,6 +150,60 @@ async (req: Request<{id: string}>, res:Response) => {
 )
 
 
+// search
+const searchVideo = asyncHandler(
+async (req: Request<{},{},{},{src: string}>, res:Response) => {
+    const {src} = req.query
+
+    // find matching videos
+    const videos = await videoModel.find({
+        title: {
+            $regex:src,
+            $options: "i",
+        }
+    }).limit(40).lean();
+
+    // if no videos send
+    if (!videos) {
+        res.status(200).json({
+        status:"success",
+        message: "found no videos related to the search query",
+        payload: []
+        })
+    }
+
+    // response
+    res.status(200).json({
+    status:"success",
+    message: "fetch successful",
+    payload: videos
+    })
+    
+}
+)
+
+// subscribed users videos
+const subscribedUsersVideo = asyncHandler(
+    async (req: Request, res:Response) => {
+        
+    }
+    )
+
+// filter by tags
+const searchByTags = asyncHandler(
+    async (req: Request, res:Response) => {
+        
+    }
+    )
+
+// get trend vids
+const trendVideos = asyncHandler(
+    async (req: Request, res:Response) => {
+        
+    }
+    )
+
+
 
 // all exports
 export const videoController = {
@@ -158,5 +212,9 @@ export const videoController = {
     getAVideo,
     deleteVideo,
     getRandomVids,
-    incViewOfVideo
+    incViewOfVideo,
+    searchVideo,
+    subscribedUsersVideo,
+    searchByTags,
+    trendVideos,
 }

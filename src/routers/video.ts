@@ -35,6 +35,58 @@ router.delete(
 router.get("/random", videoController.getRandomVids)
 
 
+// search
+router.get(
+    "/search", 
+    validator(videoSchema.searchVideo), 
+    videoController.searchVideo)
+    
+// subscribed users videos
+router.get(
+    "/subs", 
+    authorization,
+    videoController.searchVideo
+    )
+
+// filter by tags
+router.get(
+    "/filter",
+    validator(videoSchema.getVideosByTagsSchema),
+    videoController.searchByTags
+)
+
+// get trend vids
+router.get(
+    "/trend",
+    validator(videoSchema.trendVideosSchema),
+    videoController.trendVideos
+    )// search
+router.get(
+    "/search", 
+    validator(videoSchema.searchVideo), 
+    videoController.searchVideo)
+    
+// subscribed users videos
+router.get(
+    "/subs", 
+    authorization,
+    videoController.searchVideo
+    )
+
+// filter by tags
+router.get(
+    "/filter",
+    validator(videoSchema.getVideosByTagsSchema),
+    videoController.searchByTags
+)
+
+// get trend vids
+router.get(
+    "/trend",
+    validator(videoSchema.trendVideosSchema),
+    videoController.trendVideos
+    )
+
 // get a video
 router.get("/:id",
     validator(videoSchema.getAVideoSchema), 
