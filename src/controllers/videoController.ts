@@ -104,10 +104,28 @@ async (req: Request<{id: string}>, res:Response) => {
 )
 
 
+const getRandomVids = asyncHandler(
+    async (req: Request, res:Response) => {
+
+        // fetch videos
+        const videos = await videoModel.aggregate([{$sample: {size: 40}}])
+        if (!videos) throw new customError(500, "fetching random videos failed: No videos in the database.")
+
+        // response
+        res.status(200).json({
+        status:"success",
+        message: "fetched random videos",
+        payload: videos
+        })
+    }
+    )
+
+
 // all exports
 export const videoController = {
     createVideo,
     updateVideo,
     getAVideo,
-    deleteVideo
+    deleteVideo,
+    getRandomVids
 }

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { z } from "zod";
 import { IVideoDoc, IVideoLeanDoc } from "../models/videoModel";
 import { paramsMongooseIdCheck } from "./userSchema";
@@ -5,7 +6,22 @@ import { paramsMongooseIdCheck } from "./userSchema";
 
 // get a video schema
 
-const getAVideoSchema = paramsMongooseIdCheck
+// const getAVideoSchema = paramsMongooseIdCheck
+const getAVideoSchema = z.object({
+    params: z.object({
+        id: z.string().refine((id)=>{
+            if(!mongoose.isValidObjectId(id)){
+                console.log({message: `not a valid mongoose id: ${id}`});
+                return false
+            }
+            return true
+
+        }, {
+            message: `not a valid mongoose id`
+        })
+    })
+})
+
 
 
 // create video schema '''''''''''''

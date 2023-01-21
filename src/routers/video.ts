@@ -6,12 +6,6 @@ import { videoSchema } from "../validationSchemas/videoSchema";
 
 const router = express.Router();
 
-// get a video
-router.get(
-    "/:id", 
-    validator(videoSchema.getAVideoSchema), 
-    videoController.getAVideo
-    )
 
 // create a video
 router.post(
@@ -37,6 +31,16 @@ router.delete(
     videoController.deleteVideo,
 )
 
+// fetchRandom videos
+router.get("/random", videoController.getRandomVids)
+
+
+// get a video
+router.get(
+    "/:id", 
+    validator(videoSchema.getAVideoSchema), 
+    videoController.getAVideo
+    )
 
 const videoRouter = router
 export default videoRouter

@@ -25,8 +25,6 @@ const signup = asyncHandler(
         if (!createdUser) {
             throw new customError(422, "user creation is successful. user fetch failed.")
         }
-
-        console.log(typeof createdUser._id, createdUser._id);
         
 
         // response
