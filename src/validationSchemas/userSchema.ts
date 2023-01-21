@@ -3,7 +3,7 @@ import {z, object, string} from "zod";
 
 
 // params mongoose id check
-const paramsMongooseIdCheck = z.object({
+export const paramsMongooseIdCheck = z.object({
     params: z.object({
         id: string().refine((id)=>mongoose.isValidObjectId(id), {
             message: "not a valid mongoose id."

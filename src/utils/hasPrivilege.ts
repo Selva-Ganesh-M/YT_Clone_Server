@@ -2,6 +2,6 @@
 
 import { customError } from "./customError"
 
-export default (id: string, _id:string) => {
-    if (id!==_id) throw new customError(409, "update failed: You can only update your details only.")
+export default (option1: string, option2:string) => {
+    if (option1!==option2) throw new customError(409, "update failed: You can only update your details only.")
 }

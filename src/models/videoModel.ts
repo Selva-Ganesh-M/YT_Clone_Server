@@ -1,7 +1,7 @@
 import mongoose, { Document } from "mongoose";
-import { IUser } from "./userModel";
 
 export interface IVideo {
+    userId: string;
     title: string
     desc: string
     imgUrl: string
@@ -10,12 +10,11 @@ export interface IVideo {
     tags: Array<string>
     likes: Array<string>
     dislikes: Array<string>
-    userId: string;
   }
 
 export interface IVideoDoc extends IVideo, Document{}
 
-export interface IVideoLeanDoc extends IUser{
+export interface IVideoLeanDoc extends IVideo{
   _id: string
 }
   

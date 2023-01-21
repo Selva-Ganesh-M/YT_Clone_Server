@@ -5,6 +5,7 @@ import authRouter from "./routers/auth"
 import { customErrorHandler } from "./middlewares/customErrorHandler";
 import cookieParser from "cookie-parser";
 import { userRouter } from "./routers/user";
+import videoRouter from "./routers/video";
 
 const server = express();
 
@@ -15,6 +16,7 @@ server.use(cookieParser())
 // Routers
 server.use("/api/auth", authRouter)
 server.use("/api/users", userRouter)
+server.use("/api/videos", videoRouter)
 
 // custom error handler
 server.use(customErrorHandler);
