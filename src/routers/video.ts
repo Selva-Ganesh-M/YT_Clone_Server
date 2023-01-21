@@ -36,11 +36,19 @@ router.get("/random", videoController.getRandomVids)
 
 
 // get a video
-router.get(
-    "/:id", 
+router.get("/:id",
     validator(videoSchema.getAVideoSchema), 
     videoController.getAVideo
-    )
+)
 
+// inc view count of a video
+router.post("/view/:id",
+    validator(videoSchema.viewAVideoSchema),
+    videoController.incViewOfVideo
+)
+
+
+
+// exports
 const videoRouter = router
 export default videoRouter

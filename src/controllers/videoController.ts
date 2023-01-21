@@ -104,6 +104,7 @@ async (req: Request<{id: string}>, res:Response) => {
 )
 
 
+// get random videos
 const getRandomVids = asyncHandler(
     async (req: Request, res:Response) => {
 
@@ -120,6 +121,35 @@ const getRandomVids = asyncHandler(
     }
     )
 
+// view a video
+const incViewOfVideo = asyncHandler(
+async (req: Request<{id: string}>, res:Response) => {
+    const{id: videoId} = req.params;
+
+    // is video exists
+    const video = await videoModel.findById(videoId).lean();
+    if (!video) throw new customError(404, "view increase failed: requested video not found.")
+
+    // increment view count
+    const updatedVideo = await videoModel.findByIdAndUpdate(videoId, {
+        $inc: {
+            views: 1
+        }
+    },{
+        new: true
+    })
+    if (!updatedVideo) throw new customError(500, "increment view failed: mongoose returned null")
+
+    // response
+    res.status(200).json({
+    status:"success",
+    message: "view count increased",
+    payload: updatedVideo
+    })
+}
+)
+
+
 
 // all exports
 export const videoController = {
@@ -127,5 +157,6 @@ export const videoController = {
     updateVideo,
     getAVideo,
     deleteVideo,
-    getRandomVids
+    getRandomVids,
+    incViewOfVideo
 }

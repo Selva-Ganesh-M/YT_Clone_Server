@@ -74,13 +74,16 @@ const updateVideoSchema = paramsMongooseIdCheck.extend({
 })
 
 // delete a video
-
 const deleterUserSchema = paramsMongooseIdCheck
+
+// view a video
+const viewAVideoSchema = paramsMongooseIdCheck
 
 
 export const videoSchema = {
     createVideoSchema,
     updateVideoSchema,
     getAVideoSchema,
-    deleterUserSchema
+    deleterUserSchema,
+    viewAVideoSchema
 }
