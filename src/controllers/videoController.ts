@@ -195,12 +195,27 @@ const subscribedUsersVideo = asyncHandler(
                 })
             })
         )
+        
+        // "Promise.all" returns an array and "map" returns and array as well,
+        // so we're looking at something like 
+        // [
+        //     [
+        //         {
+        //             item: 1
+        //         },
+        //         {
+        //             item: 2
+        //         },
+        //     ]
+        // ]
+        // so, we have to erase the outer array
+        const payload = videos.flat()
 
         // response
         res.status(200).json({
         status:"success",
-        message: videos.length ? "videos fetch successful": "no videos from subscribed users.",
-        payload: videos
+        message: payload.length ? "videos fetch successful": "no videos from subscribed users.",
+        payload: payload
         })
     }
     )

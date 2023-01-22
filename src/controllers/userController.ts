@@ -5,9 +5,7 @@ import userModel from "../models/userModel";
 import { userServices } from "../services/userServices";
 import hasPrivilege from "../utils/hasPrivilege";
 import { customError } from "../utils/customError";
-import { string } from "zod";
 import hashPassword from "../utils/hashPassword";
-import mongoose from "mongoose";
 
 
 // get a user'''''''''''''''''''''''''''''''''''''''''''

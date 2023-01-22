@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { userRouter } from "./routers/user";
 import videoRouter from "./routers/video";
 import customReqLogger from "./utils/customRequestLogger";
+import commentsRouter from "./routers/comment.route";
 
 const server = express();
 
@@ -20,6 +21,7 @@ server.use(cookieParser())
 server.use("/api/auth", authRouter)
 server.use("/api/users", userRouter)
 server.use("/api/videos", videoRouter)
+server.use("/api/comments", commentsRouter)
 
 
 
