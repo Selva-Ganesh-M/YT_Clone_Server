@@ -199,16 +199,29 @@ const subscribedUsersVideo = asyncHandler(
         // response
         res.status(200).json({
         status:"success",
-        message: videos ? "videos fetch successful": "no videos from subscribed users.",
-        payload: videos ? videos : []
+        message: videos.length ? "videos fetch successful": "no videos from subscribed users.",
+        payload: videos
         })
     }
     )
 
 // filter by tags
 const searchByTags = asyncHandler(
-    async (req: Request, res:Response) => {
-        
+    async (req: Request<{},{},{},{tags:string}>, res:Response) => {
+        const tags = req.query.tags.split(",")
+        const videos = await videoModel.find({
+            tags: {
+                $in: tags
+            }
+        })
+
+        // response
+        res.status(200).json({
+            status:"success",
+            message: videos.length ? "videos fetch successful": "no videos matching the tags found.",
+            payload: videos
+            })
+
     }
     )
 
