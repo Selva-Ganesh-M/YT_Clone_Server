@@ -228,7 +228,16 @@ const searchByTags = asyncHandler(
 // get trend vids
 const trendVideos = asyncHandler(
     async (req: Request, res:Response) => {
+
+        // fetching
+        const videos = await videoModel.find().lean().sort({views: -1})
         
+        // response
+        res.status(200).json({
+        status:"success",
+        message: videos.length ? "fetched trending videos" : "no trending videos found",
+        payload: videos
+        })
     }
     )
 

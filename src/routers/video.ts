@@ -58,7 +58,6 @@ router.get(
 // get trend vids
 router.get(
     "/trend",
-    validator(videoSchema.trendVideosSchema),
     videoController.trendVideos
     )
 
