@@ -185,7 +185,23 @@ async (req: Request<{},{},{},{src: string}>, res:Response) => {
 // subscribed users videos
 const subscribedUsersVideo = asyncHandler(
     async (req: Request, res:Response) => {
-        
+        const self = req.user!;
+
+        // get videos from subscribedUsers
+        const videos = await Promise.all(
+            self.subscribedUsers!.map(id=>{
+                return videoModel.find({
+                    userId: id
+                })
+            })
+        )
+
+        // response
+        res.status(200).json({
+        status:"success",
+        message: videos ? "videos fetch successful": "no videos from subscribed users.",
+        payload: videos ? videos : []
+        })
     }
     )
 
