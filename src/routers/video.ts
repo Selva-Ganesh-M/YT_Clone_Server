@@ -31,6 +31,22 @@ router.delete(
     videoController.deleteVideo,
 )
 
+// like a video
+router.put(
+    "/like/:id",
+    authorization,
+    validator(videoSchema.likeAVideoSchema),
+    videoController.likeVideo
+)
+
+// like a video
+router.put(
+    "/dislike/:id",
+    authorization,
+    validator(videoSchema.likeAVideoSchema),
+    videoController.dislike
+)
+
 // fetchRandom videos
 router.get("/random", videoController.getRandomVids)
 

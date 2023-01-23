@@ -15,7 +15,7 @@ export interface IVideo {
 export interface IVideoDoc extends IVideo, Document{}
 
 export interface IVideoLeanDoc extends IVideo{
-  _id: string
+  _id: mongoose.Types.ObjectId
 }
   
 const VideoSchema = new mongoose.Schema<IVideo>(

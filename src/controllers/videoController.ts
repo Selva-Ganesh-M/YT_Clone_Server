@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import asyncHandler from "express-async-handler"
-import videoModel from "../models/videoModel"
+import { LeanDocument } from "mongoose"
+import videoModel, { IVideo, IVideoLeanDoc } from "../models/videoModel"
 import { customError } from "../utils/customError"
 import hasPrivilege from "../utils/hasPrivilege"
 
@@ -257,6 +258,70 @@ const trendVideos = asyncHandler(
     )
 
 
+// like video
+const likeVideo = asyncHandler(
+    async (req: Request<{id: string}>, res:Response) => {
+        const {id: videoId} = req.params;
+        const self = req.user!;
+
+        // check if video exists
+        const video = await videoModel.findById(videoId).lean();
+        if (!video) throw new customError(404, "like operation failed: video not found")
+
+        // prep response  
+        let response: IVideoLeanDoc;
+        response = await videoModel.findByIdAndUpdate(videoId, {
+                $addToSet: {
+                    likes: self._id
+                },
+                $pull: {
+                    dislikes: self._id
+                }
+        }, {new: true}).lean()
+
+        if (!response) throw new customError(500, "like op failed: mongoose returned null.")
+
+        // response
+        res.status(200).json({
+        status:"success",
+        message: "liked a video",
+        payload: response
+        })
+    }
+)
+
+
+// dislike a video
+
+const dislike = asyncHandler(
+    async (req: Request<{id:string}>, res:Response) => {
+        const self = req.user!;
+        const videoId = req.params.id;
+
+        // check if video exists
+        const video = await videoModel.findById(videoId).lean();
+        if (!video) throw new customError(404, "dislike op failed: requested video not found.");
+
+        // update db
+        const updatedVideo = await videoModel.findByIdAndUpdate(videoId, {
+            // remove from likes
+            $pull: {likes:self._id},
+            // append to dislikes
+            $addToSet: {dislikes:self._id}
+        })
+
+        if (!updatedVideo) throw new customError(500, "dislike failed: mongoose returned null");
+
+        // send response
+        res.status(200).json({
+        status:"success",
+        message: "dislike successful",
+        payload: updatedVideo
+        })
+    }
+)
+
+// const 
 
 // all exports
 export const videoController = {
@@ -270,4 +335,6 @@ export const videoController = {
     subscribedUsersVideo,
     searchByTags,
     trendVideos,
+    likeVideo,
+    dislike
 }

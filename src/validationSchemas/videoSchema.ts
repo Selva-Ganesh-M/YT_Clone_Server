@@ -111,6 +111,8 @@ const searchVideo = z.object({
     })
 })
 
+// like a video
+const likeAVideoSchema = paramsMongooseIdCheck
 
 export const videoSchema = {
     createVideoSchema,
@@ -120,5 +122,6 @@ export const videoSchema = {
     viewAVideoSchema,
     trendVideosSchema,
     getVideosByTagsSchema,
-    searchVideo
+    searchVideo,
+    likeAVideoSchema
 }
