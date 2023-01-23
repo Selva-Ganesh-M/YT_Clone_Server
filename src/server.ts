@@ -8,10 +8,14 @@ import { userRouter } from "./routers/user";
 import videoRouter from "./routers/video";
 import customReqLogger from "./utils/customRequestLogger";
 import commentsRouter from "./routers/comment.route";
+import cors from "cors"
+import corsOptions from "./corsConfig/corsOptions";
 
 const server = express();
 
+
 // middlewares
+server.use(cors(corsOptions));
 server.use(express.json())
 server.use(cookieParser())
     //custom request logger

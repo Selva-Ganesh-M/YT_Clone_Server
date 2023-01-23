@@ -299,7 +299,6 @@ const likeVideo = asyncHandler(
 
 
 // dislike a video
-
 const dislike = asyncHandler(
     async (req: Request<{id:string}>, res:Response) => {
         const self = req.user!;
@@ -327,8 +326,6 @@ const dislike = asyncHandler(
         })
     }
 )
-
-// const 
 
 // all exports
 export const videoController = {
