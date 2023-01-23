@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import asyncHandler from "express-async-handler"
 import { LeanDocument } from "mongoose"
+import commentModel from "../models/commentModel"
 import videoModel, { IVideo, IVideoLeanDoc } from "../models/videoModel"
 import { customError } from "../utils/customError"
 import hasPrivilege from "../utils/hasPrivilege"
@@ -94,11 +95,17 @@ async (req: Request<{id: string}>, res:Response) => {
     const deletedVideo = await videoModel.findByIdAndDelete(videoId).lean()
     if (!deletedVideo) throw new customError(500, "video deletion failed: mongoose deletion failed.")
 
+    // delete respective comments
+    const deletedComments = await commentModel.deleteMany({
+        videoId
+    })
+    if (!deletedComments) throw new customError(500, "video deletion partially failed: video deleted but comments not deleted. mongoose returned null.")
+
     // response
     res.status(200).json({
     status:"success",
     message: "video deleted succesfully",
-    payload: deletedVideo
+    payload: {deletedVideo, deletedComments}
     })
 
 }
