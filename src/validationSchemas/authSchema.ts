@@ -2,8 +2,6 @@ import {z, object, string, TypeOf} from "zod"
 
 
 // signup
-
-
 const signup = object({
     body: object({
         // username
@@ -12,7 +10,7 @@ const signup = object({
         }),
         
         // password
-        password: string()
+        password: string({required_error: "password is a required field."})
         .regex(new RegExp(".*[A-Z].*"), "One uppercase character")
         .regex(new RegExp(".*[a-z].*"), "One lowercase character")
         .regex(new RegExp(".*\\d.*"), "One number")
@@ -32,19 +30,31 @@ const signup = object({
             required_error: "Email is a required field",
           }).optional(),
     })
-})
-
-
-export type TAuthSignURequest = TypeOf<typeof signup>
-
-
-
-
-
+  })
+  export type TAuthSignURequest = TypeOf<typeof signup>
+  
+  
+  // google signup
+  const googleSignUp = object({
+      body: object({
+          // username
+          username: string({
+              required_error: "username is a required field."
+          }),
+  
+          // email
+          email: string({
+              required_error: "Email is a required field",
+            }).email("Invalid email addresss."),
+  
+          // image
+          image: string({
+              required_error: "Email is a required field",
+            }).optional(),
+      })
+    })
 
 // signin   
-
-
 const signin = object({
     body: object({
         email: string({
@@ -70,7 +80,6 @@ export type TAuthSigninRequestBody = TAuthSigninRequest["body"]
 
 
 // exports
-
 export const authSchema = {
-    signup, signin
+    signup, signin, googleSignUp
 }

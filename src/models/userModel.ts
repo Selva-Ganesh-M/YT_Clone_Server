@@ -8,7 +8,7 @@ export interface IUser {
     image?: string;
     subscribers?: number;
     subscribedUsers?: Array<string>;
-
+    isGoogleCreated?: Boolean;
 }
 
 export interface IUserDoc extends IUser, Document{}
@@ -30,10 +30,13 @@ const userSchema = new mongoose.Schema<IUser>({
     },
     password: {
         type: String,
-        required: true,
+        // here password is not required for a user that signs up using google auth
+        // But other users must have a password
+        // must be handle this in the validation phase
     },
     image: {
         type: String,
+        default: "https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png"
     },
     subscribers: {
         type: Number,
@@ -42,6 +45,10 @@ const userSchema = new mongoose.Schema<IUser>({
     subscribedUsers: {
         type: [String],
         default: []
+    },
+    isGoogleCreated: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

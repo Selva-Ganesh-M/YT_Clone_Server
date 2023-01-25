@@ -24,6 +24,8 @@ export const authorization =  asyncHandler(
 
         // token verification
         const token = req.cookies.access_token;
+        console.log("cookie: ",req.cookies);
+        
         if (!token) throw new customError(401, "authorization failed: missing access_token.")
 
         const {email, _id, iat} = jwt.verify(token, JWT_SECRET!) as Tjwt;
