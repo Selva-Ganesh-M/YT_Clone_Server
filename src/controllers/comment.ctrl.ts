@@ -1,6 +1,6 @@
 import { Request, response, Response } from "express"
 import asyncHandler from "express-async-handler"
-import commentModel from "../models/commentModel";
+import commentModel, { IComment } from "../models/commentModel";
 import videoModel from "../models/videoModel";
 import { customError } from "../utils/customError";
 import hasPrivilege from "../utils/hasPrivilege";
@@ -64,6 +64,43 @@ const deleteComment = asyncHandler(
     }
 )
 
+
+// updating a comment
+const updateComment = asyncHandler(
+    async (req: Request<{id: string}, {}, IComment>, res:Response) => {
+        const user = req.user!
+
+        // if comment exists
+        const {id: commentId} = req.params;
+        const comment = await commentModel.findById(commentId).lean();
+        if (!comment) throw new customError(404, "comment update failed: requested comment not found");
+
+
+        // checking if operation is possible
+        hasPrivilege(user._id.toString(), comment.userId.toString());
+
+        // updating comment
+        const updatedComment = await commentModel.findByIdAndUpdate(
+            commentId,
+            {
+                $set: req.body
+            },
+            {
+                new: true
+            }
+            );
+        if (!updatedComment) throw new customError(500, "comment updating failed: mongoose update request returned null")
+
+        // response
+        res.status(200).json({
+        status:"success",
+        message: "comment is updated.",
+        payload: updatedComment
+        })
+
+    }
+)
+
 // get all comments
 const getAllComments = asyncHandler(
     async (req: Request<{id:string}>, res: Response) => {
@@ -87,5 +124,5 @@ const getAllComments = asyncHandler(
 
 
 export const commentCtrl = {
-    addAComment, deleteComment, getAllComments
+    addAComment, deleteComment, getAllComments, updateComment
 }

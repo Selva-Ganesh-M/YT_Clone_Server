@@ -11,6 +11,9 @@ const addNewCommentSchema = paramsMongooseIdCheck.extend({
     })
 })
 
+// updating new comment
+const updateComment = addNewCommentSchema
+
 // deleting a comment
 const deleteAComment = paramsMongooseIdCheck
 
@@ -20,5 +23,6 @@ const getAllComments = paramsMongooseIdCheck
 export const commentSchema = {
     addNewCommentSchema,
     deleteAComment,
-    getAllComments
+    getAllComments,
+    updateComment
 }

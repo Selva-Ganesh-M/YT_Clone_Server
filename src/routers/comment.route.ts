@@ -20,6 +20,12 @@ router
             validator(commentSchema.addNewCommentSchema), 
             commentCtrl.addAComment
             )
+        // add a new comment
+        .put(
+            authorization,
+            validator(commentSchema.updateComment), 
+            commentCtrl.updateComment
+            )
         // delete a comment
         .delete(
             authorization,
